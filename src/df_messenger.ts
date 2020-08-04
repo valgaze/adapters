@@ -327,6 +327,7 @@ const getContent = (content: Content) => {
  * Adapter for Slack, currently only supporting text
  */
 
+export { suggestions }
 export const aogAdapter = ({ messages }: { messages: RichSay[] }) => {
   const payload = []
 
