@@ -1,7 +1,21 @@
 import { Card, Button, Image, Item, CarouselSelect } from "narratory"
 
+/** Notes for DF-Messenger
+ * - suggestions do not have URL (narratory suggestions dont have them, so discarded)
+ * - Button:
+ *  - No way to control styling from narratory, will be default styling
+ *  - Buttons also do not emit events, no way to specify from narratory
+ *
+ * - Card
+ *  - Card becomes df-messenge "info" component
+ *  - A "buttons" on a narratory card turn into actionLinks (it can only take one, in future support full buttons)
+ *
+ *
+ *
+ */
+
 // [x] card
-// image
+// [x] image
 // button
 // list
 // carousel

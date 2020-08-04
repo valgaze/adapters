@@ -2,12 +2,6 @@
 import { Content, RichSay, Card, List, Image, Button } from "narratory"
 import { cardinal } from "narratory/out/data/systemEntities"
 const checkArr = (arr) => arr && arr.length
-/**Notes
- * - suggestions do not have URL (narratory suggestions dont have them, so discarded)
- *
- *
- *
- */
 
 /**
  * DOCS
@@ -69,11 +63,11 @@ const info = (content: RichSay) => {
       }
  */
 
-const description = () => {
+const description = (input) => {
   return {
     type: "description",
-    title: "Description title",
-    text: ["This is text line 1.", "This is text line 2."],
+    title: input.title,
+    text: [input.text],
   }
 }
 // Image
@@ -84,11 +78,11 @@ const description = () => {
         "accessibilityText": "Example logo"
       }
  */
-const image = () => {
+const image = (input) => {
   return {
     type: "image",
-    rawUrl: "https://example.com/images/logo.png",
-    accessibilityText: "Example logo",
+    rawUrl: input.url,
+    accessibilityText: input.alt,
   }
 }
 
@@ -113,20 +107,20 @@ const image = () => {
 
  */
 
-const button = () => {
+const button = (input) => {
   return {
     type: "button",
     icon: {
       type: "chevron_right",
       color: "#FF9800",
     },
-    text: "Button text",
-    link: "https://example.com",
-    event: {
-      name: "",
-      languageCode: "",
-      parameters: {},
-    },
+    text: input.text,
+    link: input.url,
+    // event: {
+    //   name: "",
+    //   languageCode: "",
+    //   parameters: {},
+    // },
   }
 }
 
@@ -276,6 +270,7 @@ const getContent = (input: RichSay) => {
   }
 
   if (content.type === "button") {
+    return button(content)
   }
 
   if (content.type === "carousel") {
@@ -285,7 +280,6 @@ const getContent = (input: RichSay) => {
  *
  * Decisions:
  *  >"carousel" is now accordion for df-messenger
- *
  */
 
 const buildText = (textInput) => {
