@@ -128,7 +128,7 @@ const button = () => {
 
 /**
  * 
- * @param param0    {
+   {
         "type": "list",
         "title": "List item 1 title",
         "subtitle": "List item 1 subtitle",
