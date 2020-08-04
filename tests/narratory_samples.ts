@@ -17,12 +17,15 @@ import { Card, Button, Image, Item, CarouselSelect } from "narratory"
  *    = For now, list event languageCode is en_US (which isn't a huge deal for events)
  *  - If there is a "root" image of a list it's added, but df-messenger list does not render images, images for list items will be discarded
  *
+ * - Carousel
+ *  - Carousels become accodions in df-messenger
+ *  - Accordions will not use subtitle
  */
 
 // [x] card
 // [x] image
 // [x] button
-// list
+// [x] list
 // carousel
 
 const narratory_image: Image = {
@@ -69,11 +72,12 @@ const narratory_list = {
   type: "list",
 }
 
-console.log("#", JSON.stringify(narratory_list))
 const narratory_carousel: CarouselSelect = {
   items: [narratoryListItem, narratoryListItem2],
   type: "carousel",
 }
+
+console.log("##", JSON.stringify(narratory_carousel))
 
 const narratory_suggestions = ["chip1", "chip2"]
 

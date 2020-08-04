@@ -200,18 +200,26 @@ const list = (input) => {
       }
  */
 
-const accordion = () => {
-  return {
-    type: "accordion",
-    title: "Accordion title",
-    subtitle: "Accordion subtitle",
-    image: {
-      src: {
-        rawUrl: "https://example.com/images/logo.png",
+const accordion = (input) => {
+  const output = []
+  const accordionItem = (item) => {
+    return {
+      type: "accordion",
+      title: item.title,
+      // "subtitle": "Accordion subtitle",
+      image: {
+        src: {
+          rawUrl: item.url,
+        },
       },
-    },
-    text: "Accordion text",
+      text: item.description,
+    }
   }
+  const { items } = input
+  items.forEach((item) => {
+    output.push(accordionItem(item))
+  })
+  return output
 }
 
 // Suggestion
@@ -276,6 +284,7 @@ const getContent = (input: RichSay) => {
   }
 
   if (content.type === "carousel") {
+    return accordion(content)
   }
 }
 /**
