@@ -58,6 +58,11 @@ const narratory_carousel: CarouselSelect = {
 
 const narratory_suggestions = ["chip1", "chip2"]
 
+const narratory_payload_suggestions = {
+  text: "abc def",
+  suggestions: narratory_suggestions,
+}
+
 const narratory_payload_list = {
   text: "abc def",
   suggestions: narratory_suggestions,
@@ -71,4 +76,6 @@ export {
   narratory_card,
   narratory_button,
   narratory_image,
+  narratory_suggestions,
+  narratory_payload_suggestions,
 }

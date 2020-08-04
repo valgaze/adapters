@@ -1,35 +1,27 @@
 import * as test from "tape"
-import { suggestions } from "./../src/df_messenger"
+
+// >> Samples
+import {
+  narratory_payload_suggestions,
+  //   narratory_payload_list,
+  //   narratory_carousel,
+  //   narratory_list,
+  //   narratory_card,
+  //   narratory_button,
+  //   narratory_image,
+} from "./narratory_samples"
+
+// >> Adapters
+import { dialogflowmessengerAdapter } from "./../src/df_messenger"
+// import { suggestions } from "./../src/df_messenger"
 
 test("setup", function (t: any) {
   t.end()
 })
 
 test("<Suggestions>", async (t: any) => {
-  const res = suggestions(["a", "b"])
-  const expected = {
-    type: "chips",
-    options: [
-      {
-        text: "Chip 1",
-        image: {
-          src: {
-            rawUrl: "https://example.com/images/logo.png",
-          },
-        },
-        link: "https://example.com",
-      },
-      {
-        text: "Chip 2",
-        image: {
-          src: {
-            rawUrl: "https://example.com/images/logo.png",
-          },
-        },
-        link: "https://example.com",
-      },
-    ],
-  }
+  const res = "x"
+  const expected = narratory_payload_suggestions
   const actual = res
   t.deepEqual(actual, expected)
 })

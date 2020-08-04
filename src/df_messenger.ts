@@ -1,16 +1,11 @@
 //@ts-nocheck
 import { Content, RichSay, Card, List, Image, Button } from "narratory"
 
-// Combine them this way: https://cloud.google.com/dialogflow/docs/integrations/dialogflow-messenger#combining_response_types
-
 /**
  * DOCS
  * - https://cloud.google.com/dialogflow/docs/integrations/dialogflow-messenger
  * - https://cloud.google.com/dialogflow/docs/intents-rich-messages
- * -
- *
- *
- *
+ * - https://cloud.google.com/dialogflow/docs/integrations/dialogflow-messenger#combining_response_types
  */
 
 // info
@@ -268,6 +263,51 @@ const suggestions = (suggestions: string[]) => {
   }
 }
 
+// TODO: hanldle chips
+const getContent = (content: Content) => {
+  const payload = []
+
+  switch (content.type) {
+    case "card":
+      return info(content as Card)
+    case "list":
+      return getList(content as List)
+    default:
+      return null
+  }
+}
+/**
+ *
+ * Decisions:
+ *  >"carousel" is now accordion for df-messenger
+ *
+ */
+
+export const dialogflowmessengerAdapter = ({
+  messages,
+}: {
+  messages: RichSay[]
+}) => {
+  const payload = []
+
+  return {
+    richContent: messages.map((message) => {
+      if (message.suggestions && message.suggestions.length) {
+        payload.push(suggestions(message.suggestions))
+      }
+
+      return {
+        platform: "slack",
+        payload: {
+          slack: {
+            text: message.text,
+          },
+        },
+      }
+    }),
+  }
+}
+
 /**
 Narratory's:
   card
@@ -298,53 +338,4 @@ chips [suggestions at top level]
 Caveats:
 > Chips in messenger have URL, narratory does not
 >
-
-
-
-
 */
-
-// TODO: hanldle chips
-const getContent = (content: Content) => {
-  const payload = []
-
-  switch (content.type) {
-    case "card":
-      return info(content as Card)
-    case "list":
-      return getList(content as List)
-    default:
-      return null
-  }
-}
-/**
- *
- * Decisions:
- *  >"carousel" is now accordion for df-messenger
- *
- */
-/**
- * Adapter for Slack, currently only supporting text
- */
-
-export { suggestions }
-export const aogAdapter = ({ messages }: { messages: RichSay[] }) => {
-  const payload = []
-
-  return {
-    richContent: messages.map((message) => {
-      if (message.suggestions && message.suggestions.length) {
-        payload.push(suggestions(message.suggestions))
-      }
-
-      return {
-        platform: "slack",
-        payload: {
-          slack: {
-            text: message.text,
-          },
-        },
-      }
-    }),
-  }
-}
