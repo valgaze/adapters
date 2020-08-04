@@ -10,13 +10,18 @@ import { Card, Button, Image, Item, CarouselSelect } from "narratory"
  *  - Card becomes df-messenge "info" component
  *  - A "buttons" on a narratory card turn into actionLinks (it can only take one, in future support full buttons)
  *
- *
+ * - List
+ *  - List taps will not pass through events (this makes lists not useful)
+ *  - Lists will need be able to pass in an event: { "event": { "name": "", "languageCode": "", "parameters": {} }
+ *    - For now, list events name will be the same as their title
+ *    = For now, list event languageCode is en_US (which isn't a huge deal for events)
+ *  - If there is a "root" image of a list it's added, but df-messenger list does not render images, images for list items will be discarded
  *
  */
 
 // [x] card
 // [x] image
-// button
+// [x] button
 // list
 // carousel
 
@@ -64,6 +69,7 @@ const narratory_list = {
   type: "list",
 }
 
+console.log("#", JSON.stringify(narratory_list))
 const narratory_carousel: CarouselSelect = {
   items: [narratoryListItem, narratoryListItem2],
   type: "carousel",

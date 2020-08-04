@@ -153,33 +153,34 @@ const button = (input) => {
       }
  
  */
-const list = () => {
-  const listPayload = [
-    {
+const list = (input) => {
+  const output = []
+  const listItem = (item) => {
+    return {
       type: "list",
-      title: "List item 1 title",
-      subtitle: "List item 1 subtitle",
+      title: item.title,
+      subtitle: item.description,
       event: {
-        name: "",
-        languageCode: "",
+        name: item.title,
+        languageCode: "en-US",
         parameters: {},
       },
-    },
-    {
-      type: "divider",
-    },
-    {
-      type: "list",
-      title: "List item 2 title",
-      subtitle: "List item 2 subtitle",
-      event: {
-        name: "",
-        languageCode: "",
-        parameters: {},
-      },
-    },
-  ]
-  return listPayload
+    }
+  }
+  const { items } = input
+  if (input.image) {
+    output.push(image(input.image))
+  }
+  items.forEach((item, idx) => {
+    output.push(listItem(item))
+    if (idx != items.length - 1) {
+      output.push({
+        type: "divider",
+      })
+    }
+  })
+
+  return output
   // Need to spread/return somehow
 }
 
@@ -263,6 +264,7 @@ const getContent = (input: RichSay) => {
   }
 
   if (content.type === "list") {
+    return list(content) // We need to figure out how to spread this grr
   }
 
   if (content.type === "image") {
@@ -310,6 +312,8 @@ export const dialogflowmessengerAdapter = ({
     return getContent(message)
   })
 
+  const flat = [].concat(...payload)
+
   let fulfillmentText = ""
   // PlainText, need to attach to root level
   if (textNodes.length) {
@@ -319,7 +323,7 @@ export const dialogflowmessengerAdapter = ({
   }
 
   if (suggestionsPayload && suggestionsPayload.length) {
-    payload.push(suggestions(suggestionsPayload))
+    flat.push(suggestions(suggestionsPayload))
   }
 
   if (fulfillmentText) {
@@ -327,11 +331,11 @@ export const dialogflowmessengerAdapter = ({
     // payload.fulfillmentText = fulfillmentText
     return {
       fulfillmentText,
-      richContent: payload,
+      richContent: flat,
     }
   } else {
     return {
-      richContent: payload,
+      richContent: flat,
     }
   }
 }
