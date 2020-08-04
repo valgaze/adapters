@@ -265,15 +265,27 @@ const suggestions = (suggestions: string[]) => {
 
 // TODO: hanldle chips
 const getContent = (content: Content) => {
-  const payload = []
+  const suggestionPayload = []
 
-  switch (content.type) {
-    case "card":
-      return info(content as Card)
-    case "list":
-      return getList(content as List)
-    default:
-      return null
+  if (content.text && content.text.length) {
+    // Do we need to pass this through somehow?
+  }
+  if (content.type === "card") {
+  }
+  if (content.type === "list") {
+  }
+
+  if (content.type === "image") {
+  }
+
+  if (content.type === "button") {
+  }
+
+  if (content.type === "carousel") {
+  }
+
+  if (content.suggestions && content.suggestions.length) {
+    suggestionPayload.push(...content.suggestions)
   }
 }
 /**
@@ -283,29 +295,40 @@ const getContent = (content: Content) => {
  *
  */
 
+const buildText = (textInput) => {
+  return {
+    text: {
+      text: [textInput],
+    },
+  }
+}
 export const dialogflowmessengerAdapter = ({
   messages,
 }: {
   messages: RichSay[]
 }) => {
-  const payload = []
-
-  return {
+  // TODO: Plaintext
+  // If content.text, add to fulfillmentText at root level
+  const textNodes = []
+  const payload = {
     richContent: messages.map((message) => {
-      if (message.suggestions && message.suggestions.length) {
-        payload.push(suggestions(message.suggestions))
+      if (message.text && message.text.length) {
+        textNodes.push(message.tex)
       }
-
-      return {
-        platform: "slack",
-        payload: {
-          slack: {
-            text: message.text,
-          },
-        },
-      }
+      return getContent(message)
     }),
   }
+  let fulfillmentText = ""
+  // PlainText, need to attach to root level
+  if (textNodes.length) {
+    textNodes.forEach((msg) => {
+      fulfillmentText = msg
+    })
+  }
+  if (fulfillmentText) {
+    payload.fulfillmentText = fulfillmentText
+  }
+  return payload
 }
 
 /**

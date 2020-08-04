@@ -12,7 +12,7 @@ import {
 } from "./narratory_samples"
 
 // >> Adapters
-import { dialogflowmessengerAdapter } from "./../src/df_messenger"
+// import { dialogflowmessengerAdapter } from "./../src/df_messenger"
 // import { suggestions } from "./../src/df_messenger"
 
 test("setup", function (t: any) {
