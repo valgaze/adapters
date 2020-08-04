@@ -272,6 +272,7 @@ const getContent = (input: RichSay) => {
   }
 
   if (content.type === "image") {
+    return image(content)
   }
 
   if (content.type === "button") {
@@ -279,7 +280,6 @@ const getContent = (input: RichSay) => {
 
   if (content.type === "carousel") {
   }
-  return finalPayload
 }
 /**
  *
@@ -341,35 +341,3 @@ export const dialogflowmessengerAdapter = ({
     }
   }
 }
-
-/**
-Narratory's:
-  card
-  image
-  button
-  list
-  carousel
-  chip ??
-
-Messenger:
-info
-description 
-image
-button
-list
-accordion
-chips
-
-Mapped:
-info [card]
-description [skip]
-image [image]
-button [button, Narratory would need extra fields for it to dispatch events]
-list [list]
-accordion [carousel]
-chips [suggestions at top level]
-
-Caveats:
-> Chips in messenger have URL, narratory does not
->
-*/
