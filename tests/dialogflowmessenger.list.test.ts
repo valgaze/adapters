@@ -1,9 +1,9 @@
 import * as test from "tape"
 import { dialogflowmessengerAdapter } from "./../src/df_messenger"
 
-const loud = (payload: any) => {
-  console.log("\n\n>>>>\n\n", JSON.stringify(payload), "\n\n<<<\n\n")
-}
+// const loud = (payload: any) => {
+//   console.log("\n\n>>>>\n\n", JSON.stringify(payload), "\n\n<<<\n\n")
+// }
 
 test("setup", function (t: any) {
   t.end()
@@ -73,7 +73,6 @@ test("<list w/ , renders root image and discard list-items' images>", async (t: 
   }
 
   const actual = dialogflowmessengerAdapter({ messages: [narratory_payload] })
-  loud(actual)
   t.deepEqual(actual, expected)
 })
 
