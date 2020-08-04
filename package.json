@@ -5,7 +5,9 @@
   "main": "out/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "ts-node node_modules/tape/bin/tape tests/**/*.test.ts"
+    "test": "ts-node node_modules/tape/bin/tape tests/**/*.test.ts",
+    "m": "ts-node tests/main.ts",
+    "r": "ts-node $1"
   },
   "author": "",
   "license": "ISC",

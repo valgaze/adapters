@@ -1,5 +1,13 @@
 //@ts-nocheck
 import { Content, RichSay, Card, List, Image, Button } from "narratory"
+import { cardinal } from "narratory/out/data/systemEntities"
+const checkArr = (arr) => arr && arr.length
+/**Notes
+ * - suggestions do not have URL (narratory suggestions dont have them, so discarded)
+ *
+ *
+ *
+ */
 
 /**
  * DOCS
@@ -24,7 +32,7 @@ import { Content, RichSay, Card, List, Image, Button } from "narratory"
   }
  */
 
-const info = (content: Card) => {
+const info = (content: RichSay) => {
   const payload: any = {
     type: "info",
     title: content.title,
@@ -37,10 +45,13 @@ const info = (content: Card) => {
     payload.image.src.rawUrl = content.image.url
   }
 
-  // We are not handling
-  // actionLink/URL
-  // Buttons
-
+  if (content.buttons && content.buttons.length) {
+    content.buttons.forEach((button) => {
+      if (button.url) {
+        payload.actionLink = button.url
+      }
+    })
+  }
   return payload
 }
 
@@ -238,40 +249,25 @@ const accordion = () => {
  */
 
 const suggestions = (suggestions: string[]) => {
+  const options = suggestions.map((text) => {
+    return {
+      text,
+    }
+  })
   return {
     type: "chips",
-    options: [
-      {
-        text: "Chip 1",
-        image: {
-          src: {
-            rawUrl: "https://example.com/images/logo.png",
-          },
-        },
-        link: "https://example.com",
-      },
-      {
-        text: "Chip 2",
-        image: {
-          src: {
-            rawUrl: "https://example.com/images/logo.png",
-          },
-        },
-        link: "https://example.com",
-      },
-    ],
+    options,
   }
 }
 
 // TODO: hanldle chips
-const getContent = (content: Content) => {
-  const suggestionPayload = []
+const getContent = (input: RichSay) => {
+  const { content } = input
 
-  if (content.text && content.text.length) {
-    // Do we need to pass this through somehow?
-  }
   if (content.type === "card") {
+    return info(content)
   }
+
   if (content.type === "list") {
   }
 
@@ -283,10 +279,7 @@ const getContent = (content: Content) => {
 
   if (content.type === "carousel") {
   }
-
-  if (content.suggestions && content.suggestions.length) {
-    suggestionPayload.push(...content.suggestions)
-  }
+  return finalPayload
 }
 /**
  *
@@ -310,14 +303,19 @@ export const dialogflowmessengerAdapter = ({
   // TODO: Plaintext
   // If content.text, add to fulfillmentText at root level
   const textNodes = []
-  const payload = {
-    richContent: messages.map((message) => {
-      if (message.text && message.text.length) {
-        textNodes.push(message.tex)
-      }
-      return getContent(message)
-    }),
-  }
+  const suggestionsPayload = []
+  const payload = messages.map((message) => {
+    if (message.text && message.text.length) {
+      textNodes.push(message.text)
+    }
+
+    if (message.suggestions && message.suggestions.length) {
+      suggestionsPayload.push(...message.suggestions)
+    }
+
+    return getContent(message)
+  })
+
   let fulfillmentText = ""
   // PlainText, need to attach to root level
   if (textNodes.length) {
@@ -325,10 +323,23 @@ export const dialogflowmessengerAdapter = ({
       fulfillmentText = msg
     })
   }
-  if (fulfillmentText) {
-    payload.fulfillmentText = fulfillmentText
+
+  if (suggestionsPayload && suggestionsPayload.length) {
+    payload.push(suggestions(suggestionsPayload))
   }
-  return payload
+
+  if (fulfillmentText) {
+    // Decision: If multiple, allow one plaintext rather than concat
+    // payload.fulfillmentText = fulfillmentText
+    return {
+      fulfillmentText,
+      richContent: payload,
+    }
+  } else {
+    return {
+      richContent: payload,
+    }
+  }
 }
 
 /**
